@@ -19,9 +19,42 @@ class ProductController extends Controller
 
     public function getProductsFromApi()
     {
+        $data=[];
+        $hold = [];
         $woocommerce = woocommerce();
         $products = $woocommerce->get('products');
-        return response()->json(json_encode($products),200);
+        foreach ($products as $key => $product) {
+            foreach ($product as $key => $value) {
+                if ( !is_array($value) ) {
+                    if ($key != 'description' && $key != 'price_html') {
+                        $hold[$key] = $value;
+                    }
+                }
+                
+            }
+            array_push($data,$hold);
+        }
+        return response()->json(json_encode($data),200);
+    }
+
+    public function updateProductsFromApi()
+    {
+        $data=[];
+        $hold = [];
+        $woocommerce = woocommerce();
+        $product_id = request()->product_id;
+        $field[request()->field] = request()->value;
+        $response = $woocommerce->put('products/'.$product_id, $field);
+        foreach ($response as $key => $value) {
+            if ( !is_array($value) ) {
+                if ($key != 'description' && $key != 'price_html') {
+                    $hold[$key] = $value;
+                }
+            }
+            
+        }
+        array_push($data,$hold);
+        return response()->json(json_encode($data),200);
     }
 
     /**

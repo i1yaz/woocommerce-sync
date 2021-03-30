@@ -33,9 +33,12 @@
     </style><!-- Ugly Hack due to jsFiddle issue -->
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/toaster.min.js') }}"></script>
     <script src="{{ asset('js/handsontable.full.min.js') }}"></script>
     <link type="text/css" rel="stylesheet"
         href="{{ asset('css/handsontable.full.min.css') }}">
+    <link type="text/css" rel="stylesheet"
+        href="{{ asset('css/toaster.min.css') }}">
 </head>
 
 <body>
@@ -81,22 +84,245 @@
             var container = document.getElementById('example1');
 
             handsonTableLoad('http://woocommerce-laravel.test/products/fetch').then(function (response) {
+                var header = [
+                                "ID",
+                                "Name",
+                                "Slug",
+                                "Permalink",
+                                "Date created",
+                                "Date created GMT",
+                                "Date modified",
+                                "Date modified GMT",
+                                "Type",
+                                "Status",
+                                "Featured",
+                                "Catalog visibility",
+                                "Description",
+                                "Short description",
+                                "SKU",
+                                "Price",
+                                "Regular price",
+                                "Sale price",
+                                "Date on sale from",
+                                "Date on sale from gmt",
+                                "Date on sale to",
+                                "Date on sale to gmt",
+                                "On sale",
+                                "Purchasable",
+                                "Total sales",
+                                "Virtual",
+                                "Downloadable",
+                                // downloads:"Downloads",//array
+                                "Download limit",
+                                "Download expiry",
+                                "External url",
+                                "Button text",
+                                "Tax status",
+                                "Tax class",
+                                "Manage stock",
+                                "Stock quantity",
+                                "Backorders",
+                                "Backorders allowed",
+                                "Backordered",
+                                "Sold individually",
+                                "Weight",
+                                // dimensions:"Dimensions",//array
+                                "Shipping required",
+                                "Shipping taxable",
+                                "Shipping class",
+                                "Shipping class id",
+                                "Reviews allowed",
+                                "Average rating",
+                                "Rating count",
+                                // upsell_ids:"Upsell ids",array
+                                // cross_sell_ids:"Cross sell ids",array
+                                "Parent id",
+                                "Purchase note",
+                                // categories:"Categories",array
+                                // tags:"Tags",array
+                                // images:"Images",array
+                                // attributes:"Attributes",array
+                                // default_attributes:"Default attributes",array
+                                // variations:"Variations",array
+                                // grouped_products:"Grouped products",array
+                                "Menu order",
+                                // price_html:"Price html",html
+                                // related_ids:"Related ids",array
+                                // meta_data:"Meta data",array
+                                "Stock status",
+                                "Purchase price",
+                                "Supplier id",
+                                "Supplier sku",
+                                "Atum controlled",
+                                "Out stock date",
+                                "Out stock threshold",
+                                "Inheritable",
+                                "Inbound stock",
+                                "Stock on hold",
+                                "Sold today",
+                                "Sales last days",
+                                "Reserved stock",
+                                "Customer returns",
+                                "Warehouse damage",
+                                "Lost in post",
+                                "Other logs",
+                                "Out stock days",
+                                "Lost sales",
+                                "Has location",
+                                "Update date",
+                                // atum_locations:"Atum locations",//array
+                                "Atum stock status",
+                                "Low stock"
+                                // brands:"Brands"//array
+                                // _links:"Links" //array
+                            ];
+                var columns = [
+                    "ID",
+                                "Name",
+                                "Slug",
+                                "Permalink",
+                                "Date created",
+                                "Date created GMT",
+                                "Date modified",
+                                "Date modified GMT",
+                                "Type",
+                                "Status",
+                                "Featured",
+                                "Catalog visibility",
+                                "Description",
+                                "Short description",
+                                "SKU",
+                                "Price",
+                                "Regular price",
+                                "Sale price",
+                                "Date on sale from",
+                                "Date on sale from gmt",
+                                "Date on sale to",
+                                "Date on sale to gmt",
+                                "On sale",
+                                "Purchasable",
+                                "Total sales",
+                                "Virtual",
+                                "Downloadable",
+                                // downloads:"Downloads",//array
+                                "Download limit",
+                                "Download expiry",
+                                "External url",
+                                "Button text",
+                                "Tax status",
+                                "Tax class",
+                                "Manage stock",
+                                "Stock quantity",
+                                "Backorders",
+                                "Backorders allowed",
+                                "Backordered",
+                                "Sold individually",
+                                "Weight",
+                                // dimensions:"Dimensions",//array
+                                "Shipping required",
+                                "Shipping taxable",
+                                "Shipping class",
+                                "Shipping class id",
+                                "Reviews allowed",
+                                "Average rating",
+                                "Rating count",
+                                // upsell_ids:"Upsell ids",array
+                                // cross_sell_ids:"Cross sell ids",array
+                                "Parent id",
+                                "Purchase note",
+                                // categories:"Categories",array
+                                // tags:"Tags",array
+                                // images:"Images",array
+                                // attributes:"Attributes",array
+                                // default_attributes:"Default attributes",array
+                                // variations:"Variations",array
+                                // grouped_products:"Grouped products",array
+                                "Menu order",
+                                // price_html:"Price html",html
+                                // related_ids:"Related ids",array
+                                // meta_data:"Meta data",array
+                                "Stock status",
+                                "Purchase price",
+                                "Supplier id",
+                                "Supplier sku",
+                                "Atum controlled",
+                                "Out stock date",
+                                "Out stock threshold",
+                                "Inheritable",
+                                "Inbound stock",
+                                "Stock on hold",
+                                "Sold today",
+                                "Sales last days",
+                                "Reserved stock",
+                                "Customer returns",
+                                "Warehouse damage",
+                                "Lost in post",
+                                "Other logs",
+                                "Out stock days",
+                                "Lost sales",
+                                "Has location",
+                                "Update date",
+                                // atum_locations:"Atum locations",//array
+                                "Atum stock status",
+                                "Low stock"
+                                // brands:"Brands"//array
+                                // _links:"Links" //array
+                            ]
                 var data = JSON.parse(response);
                 var hot = new Handsontable(container, {
                     data: data,
                     rowHeaders: true,
-                    colHeaders: true,
+                    colHeaders: header,
                     width: '100%',
                     height: '100%',
                     rowHeights: 30,
                     colWidths: 100,
-                    afterChange: function (changes, src, oldValue, newValue) {
-                        if (src !== 'loadData') {
-                            // console.log('Row index: ' + changes[0][0] + oldValue + newValue)
-                            var data = this.getDataAtRow(changes[0][0]);
-                            console.log(data)
+                    afterChange: function (changes, event, oldValue, newValue) {
+                        if (event === 'edit') {
+                            var postData;
+                            var changed_row = changes[0][0];
+                            var data = this.getDataAtRow(changed_row);
+                            changes.forEach(([row, db_field, oldValue, newValue]) => {
+                                postData = {field: db_field,value:newValue}
+                            });
+                            // console.log(data);
+                                $.ajax({
+                                    type: "post",
+                                    headers: {
+                                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                    },
+                                    url: "{!! url('products/update/"+data[0]+"') !!}",
+                                    data: postData,
+                                    dataType: "json",
+                                    success: function (response) {
+                                        data = JSON.parse(response)
+                                        var arr = Object.keys(data).map((k) => data[k])
+                                        var fieldName = postData.field;
+                                        var value = arr[0][postData.field];
+                                        toastr.success('', 'Data updated');
+                                        hot.setDataAtRowProp(changed_row, fieldName, value, 'update_success');
+                                    },
+                                    error:function(e){
+                                        toastr.error('', 'Something went wrong please try again!')
+                                    }
+
+                            });
                         }
+                    },
+                    cells : function(row, col, prop) {
+                        var cellProperties = {};
+
+                        if (col > 0) {
+                            cellProperties.readOnly = false;
+                        }
+                        else
+                        {
+                            cellProperties.readOnly = true;
+                        }
+
+                        return cellProperties;
                     }
+                    
                     // afterSelection: function (r, c) {
                     //     var data = this.getDataAtRow(r);
                     //     console.log(data)

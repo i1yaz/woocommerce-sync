@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ProductController::class, 'index'] );
-Route::get('products/fetch',[ProductController::class, 'getProductsFromApi']);
+Route::get('products/fetch',[ProductController::class, 'getProductsFromApi'])->name('products.fetch');
+Route::post('products/update/{product_id}',[ProductController::class, 'updateProductsFromApi'])->name('products.update');
