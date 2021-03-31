@@ -40,6 +40,8 @@
     <link type="text/css" rel="stylesheet"
         href="{{ asset('css/toaster.min.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js" integrity="sha512-2RDFHqfLZW8IhPRvQYmK9bTLfj/hddxGXQAred2wNZGkrKQkLGj8RCkXfRJPHlDerdHHIzTFaahq4s/P4V6Qig=="
+        crossorigin="anonymous"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -408,40 +410,19 @@
             });
         });
 
-
-
-
-
-
-        // var example = document.getElementById('example');
-        // var hot = new Handsontable(example, {
-        //     data: Handsontable.helper.createSpreadsheetData(50, 50),
-        //     rowHeaders: true,
-        //     colHeaders: true,
-        //     width: '100%',
-        //     height: '100%',
-        //     rowHeights: 30,
-        //     colWidths: 100,
-        // });
-
-        // triggerBtn.addEventListener('click', function () {
-        //     if (triggerBtn.textContent === 'Collapse') {
-        //         triggerBtn.textContent = 'Expand';
-        //         blueboxElem.className = blueboxElem.className.replace(' expanded', '');
-
-        //     } else {
-        //         triggerBtn.textContent = 'Collapse';
-        //         blueboxElem.className += ' expanded'
-        //     }
-        // });
-        // sliceElem.addEventListener('transitionend', function (e) {
-        //     if (e.propertyName === 'width') {
-        //         hot.refreshDimensions();
-        //     }
-        // });
-
-
-
+        const socket = io("http://localhost:3000");
+        
+        socket.on("product created", function (msg) {
+            console.log(msg);
+        })
+        socket.on("product updated", function (msg) {
+            console.log(msg);
+        })
+        socket.on("product deleted", function (msg) {
+            console.log(msg);
+        })
+       
+        
     </script>
 </body>
 
