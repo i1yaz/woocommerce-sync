@@ -13,7 +13,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
-Route::get('/', [ProductController::class, 'index'] );
-Route::get('products/fetch',[ProductController::class, 'getProductsFromApi'])->name('products.fetch');
-Route::post('products/update/{product_id}',[ProductController::class, 'updateProductsFromApi'])->name('products.update');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth'])->group(function () {  
+    Route::get('/', [ProductController::class, 'index'] );
+    Route::get('products/fetch',[ProductController::class, 'getProductsFromApi'])->name('products.fetch');
+    Route::post('products/update/{product_id}',[ProductController::class, 'updateProductsFromApi'])->name('products.update');
+});
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
