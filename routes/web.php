@@ -23,7 +23,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('products/update/{product_id}',[ProductController::class, 'updateProductsFromApi'])->name('products.update');
 });
 
+Route::get('/pusher', function(){
+    return view('pusher');
+});
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [ProductController::class, 'index'])->name('home');
