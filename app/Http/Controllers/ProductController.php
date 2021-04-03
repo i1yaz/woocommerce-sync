@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Automattic\WooCommerce\HttpClient\HttpClientException;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -22,11 +24,27 @@ class ProductController extends Controller
         $data=[];
         $hold = [];
         $woocommerce = woocommerce();
-        $products = $woocommerce->get('products');
+
+        // $page = 1;
+        // $products = [];
+        // $all_products = [];
+        // do{
+        //     try {
+        //         $products = $woocommerce->get('products',array('per_page' => 100, 'page' => $page));
+        //         Log::info($page);
+        //     }catch(HttpClientException $e){
+        //         die("Can't get products: $e");
+        //     }
+        //     $all_products = array_merge($all_products,$products);
+        //     $page++;
+        // } while (count($products) > 0);
+
+
+        $products = $woocommerce->get('products',array('per_page' => 10));
         foreach ($products as $key => $product) {
             foreach ($product as $key => $value) {
                 if ( !is_array($value) ) {
-                    if ($key != 'description' && $key != 'price_html') {
+                    if ($key != 'description' && $key != 'price_html' && $key != 'dimensions' && $key != '_links') {
                         $hold[$key] = $value;
                     }
                 }

@@ -247,12 +247,13 @@
                     height: '100%',
                     rowHeights: 30,
                     colWidths: 100,
-                    search : true,
+                    dropdownMenu: true,
+                    filters: true,
                     afterChange: function (changes, event, oldValue, newValue) {
-                        if (event === 'edit') {
+                        if (event === 'edit') {                            
                             var postData;
                             var changed_row = changes[0][0];
-                            var data = this.getDataAtRow(changed_row);
+                            var rowData = this.getDataAtRow(changed_row);
                             changes.forEach(([row, db_field, oldValue, newValue]) => {
                                 postData = {field: db_field,value:newValue}
                             });
@@ -261,16 +262,17 @@
                                     headers: {
                                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                                     },
-                                    url: "{!! url('products/update/"+data[0]+"') !!}",
+                                    url: "{!! url('products/update/"+rowData[0]+"') !!}",
                                     data: postData,
                                     dataType: "json",
                                     success: function (response) {
-                                        data = JSON.parse(response)
+                                        var data = JSON.parse(response)
                                         var arr = Object.keys(data).map((k) => data[k])
                                         var fieldName = postData.field;
                                         var value = arr[0][postData.field];
                                         toastr.success('', 'Data updated');
                                         hot.setDataAtRowProp(changed_row, fieldName, value, 'update_success');
+                                        sessionStorage.setItem(rowData[0], changed_row);
                                     },
                                     error:function(e){
                                         toastr.error('', 'Something went wrong please try again!')
@@ -281,13 +283,14 @@
                     },
                     cells : function(row, col, prop) {
                         var cellProperties = {};
-
+                        var data = this.instance.getDataAtRow(row)
                         if (col > 0) {
                             cellProperties.readOnly = false;
                         }
                         else
                         {
                             cellProperties.readOnly = true;
+                            sessionStorage.setItem(data[0],row)
                         }
 
                         return cellProperties;
@@ -323,27 +326,30 @@
                     console.log(request);
                 })
                 socket.on("product updated", function (request) {
-                    console.log('request');
+                    console.log(request);
                     productUpdate(request)
                 })
                 socket.on("product deleted", function (request) {
                     console.log(request);
                 })
             
-                function productUpdate(request) {
-                    if (request.success == true && request.message == 'product-updated') {
-                        let payload = request.data;
-                        let data = [];
-                        Object.entries(payload).map(item => {
-                            data[item[0]] = item[1]
-                        })
-
-                        var search = hot.getPlugin('search')
-                        var queryResult = search.query(data['permalink']);
-
-                        console.log(queryResult);
-                    }
+            function productUpdate(request) {
+                if (request.success == true && request.message == 'product-updated') {
+                    let payload = request.data;
+                    let data = [];
+                    Object.entries(payload).map(item => {
+                        data[item[0]] = item[1]
+                    })
+                    var row = sessionStorage.getItem(data['id'])
+                    data.forEach(element => {
+                        var key = element[0];
+                        var value = element[1]
+                        hot.setDataAtRowProp(row, key, value, 'update_success');
+                        console.log(key,value)
+                    });
+                    console.log(data,row);
                 }
+            }
                 
 
                 function isJson(str) {
