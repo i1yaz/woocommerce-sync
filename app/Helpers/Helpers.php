@@ -2,11 +2,11 @@
 
 use Automattic\WooCommerce\Client;
 
-function woocommerce()
+function wooCommerce()
 {
     $url = config('woocommerce.url');
     $consumerKey = config('woocommerce.consumer_key');
     $consumerSecret = config('woocommerce.consumer_secret');
     $options = config('woocommerce.options');
-    return New Client($url,$consumerKey ,$consumerSecret,$options);
+    return new Client($url, $consumerKey, $consumerSecret, $options);
 }
